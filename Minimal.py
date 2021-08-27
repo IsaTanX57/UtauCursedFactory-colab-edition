@@ -1,4 +1,5 @@
 from pydub import AudioSegment
+import shutil
 import winsound
 import sys
 import subprocess
@@ -39,11 +40,11 @@ def Crossfade(Audio1, Audio2, Crossfade, OutputName, OutputFormat):
 def transform():
     for consonant in range(len(consonants)):
         for vowel in range(len(vowels)):
-            print(f"Processing \"{consonantNames[consonant]}{vowelNames[vowel]}\"")
             consonantLength = GetLenght(consonants[consonant])
             vowelLength = GetLenght(vowels[vowel])
             crossfadeMS = (min(consonantLength, vowelLength) * 1000) / 2
             Crossfade(consonants[consonant], vowels[vowel], crossfadeMS, f"./result/{consonantNames[consonant]}{vowelNames[vowel]}.wav", "wav")
+            print(f"Processed \"{consonantNames[consonant]}{vowelNames[vowel]}\"")
             if preview:
                 winsound.PlaySound(f"./result/{consonantNames[consonant]}{vowelNames[vowel]}.wav", winsound.SND_ASYNC)
 
@@ -72,9 +73,17 @@ if len(vowels) < 6:
     if input(color.BOLD + "Without the required audio files you won't be able to make a full minimal voicebank, do you still want to continue? (Y/N) " + color.END) != "Y":
         exit()
 
-if input(color.BOLD + f"\nI was able to detect {len(consonants)} consonants and {len(vowels)} vowels, which will output a voicebank consisting of {len(consonants) * len(vowels)} audio files in total. Do you want to enable audio preview? (Y/N) " + color.END) == "Y":
+input(color.BOLD + f"\nI was able to detect {len(consonants)} consonants and {len(vowels)} vowels, which will output a voicebank consisting of {len(consonants) * len(vowels)} audio files in total. Press Enter to continue" + color.END)
+if os.name == 'nt':
     preview = True
 
-transform()
+print("\n")
 
-# Crossfade("Audio1.mp3", "Audio2.mp3", 100, "Mashup.mp3", "mp3")
+if os.path.isdir("result") == False:
+    os.mkdir("result")
+
+transform()
+print("\nCopying vowels...")
+for vowel in vowels:
+    shutil.copy(vowel, "./result")
+print("\nDone! Your voicebank is in the \"result\" folder, feel free to move it to your Utau installation")
