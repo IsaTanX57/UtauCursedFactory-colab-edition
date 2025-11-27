@@ -1,3 +1,17 @@
+# Cursed Factory - Colab edition
+
+i asked Google Gemini (A.K.A google's genAI) to generate a version of this tool that is compatible with 
+Google Collab
+
+
+
+
+
+
+
+
+# original README.md
+
 # CursedFactory
 A tool for creating full minimal Utau VoiceBanks with only 6 voice clips
 
